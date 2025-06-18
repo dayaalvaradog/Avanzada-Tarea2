@@ -1,0 +1,45 @@
+﻿@model List<Tarea2.Models.Resumen>
+
+<h3>Índice de Popularidad Actual</h3>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Destino de Viaje</th>
+                <th>Clasificación (%)</th>
+                <th>Diferencia (%) vs. Anterior</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Posicion</td>
+                    <td>@item.NombreDestino</td>
+                    <td>@item.ClasificacionPorcentual.ToString("F2")%</td>
+                    <td>
+                        @if (item.DiferenciaPorcentualAnterior > 0)
+                        {
+                            <span style="color: green;">+@item.DiferenciaPorcentualAnterior.ToString("F2")%</span>
+                        }
+                        else if (item.DiferenciaPorcentualAnterior < 0)
+                        {
+                            <span style="color: red;">@item.DiferenciaPorcentualAnterior.ToString("F2")%</span>
+                        }
+                        else
+                        {
+                            <span>0.00%</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay datos de encuestas disponibles para mostrar.</p>
+}
