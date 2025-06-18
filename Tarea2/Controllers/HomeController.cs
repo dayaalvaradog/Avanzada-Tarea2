@@ -77,7 +77,7 @@ namespace Tarea2.Controllers
                 {
                     Posicion = i + 1,
                     NombreDestino = actual.Nombre,
-                    ClasificacionPorcentual = Math.Round(porcentajeActual, 2), 
+                    ClasificacionPorcentual = Math.Round(porcentajeActual, 2),
                     DiferenciaPorcentualAnterior = Math.Round(diferenciaAnterior, 2)
                 });
             }
@@ -103,6 +103,53 @@ namespace Tarea2.Controllers
                 new SelectListItem { Value = "CR", Text = "Costa Rica" },
                 new SelectListItem { Value = "MX", Text = "México" },
             };
+        }
+
+        public ActionResult AgregarEncuesta()
+        {
+            ViewBag.Paises = ObtenerListaPaises();
+            ViewBag.Roles = ObtenerListaRoles();
+            ViewBag.Destinos = ObtenerDestinos().Select(d => d.Nombre).ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult GuardarEncuesta(Encuesta model)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Destino> destinos = ObtenerDestinos();
+
+                // Sumar puntuaciones
+                Destino destinoPrimario = destinos.FirstOrDefault(d => d.Nombre == model.DestinoPrimario);
+                if (destinoPrimario != null)
+                {
+                    destinoPrimario.Puntuacion += 1;
+                }
+
+                Destino destinoSecundario = destinos.FirstOrDefault(d => d.Nombre == model.DestinoSecundario);
+                if (destinoSecundario != null)
+                {
+                    destinoSecundario.Puntuacion += 0.5;
+                }
+
+                GuardarDestinos(destinos);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Por favor, corrija los errores en el formulario.");
+                ViewBag.Roles = ObtenerListaRoles();
+                ViewBag.Paises = ObtenerListaPaises();
+                return View("Encuesta", model);
+            }
+        }
+
+        public ActionResult ActualizarGrid()
+        {
+            List<Destino> destinos = ObtenerDestinos();
+            List<Resumen> resumen = CalcularResumenIndice(destinos);
+            return PartialView("_TablaDestinos", resumen); 
         }
     }
 }

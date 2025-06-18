@@ -16,6 +16,25 @@
 
 @section scripts {
     <script>
+        $(document).ready(function () {
+            $('#btnAgregarEncuesta').on('click', function () {
+                window.location.href = '@Url.Action("AgregarEncuesta", "Home")';
+            });
+        });
 
+        // Esta función se puede llamar desde la pantalla de encuesta
+        // para recargar el grid después de guardar.
+        function refreshGrid() {
+            $.ajax({
+                url: '@Url.Action("ActualizarGrid", "Home")',
+                type: 'GET',
+                success: function (data) {
+                    $('#gridContainer').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error al actualizar el grid:", error);
+                }
+            });
+        }
     </script>
 }

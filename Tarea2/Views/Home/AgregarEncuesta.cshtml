@@ -1,0 +1,77 @@
+﻿@model Tarea2.Models.Encuesta
+
+@{
+    ViewBag.Title = "Completar Encuesta de Viajes";
+}
+
+<h2>Completar Encuesta de Viajes</h2>
+<hr />
+
+@using (Html.BeginForm("GuardarEncuesta", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NombreEncuestado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreEncuestado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NombreEncuestado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApellidoEncuestado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ApellidoEncuestado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ApellidoEncuestado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PaisPertenencia, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.PaisPertenencia, (List<SelectListItem>)ViewBag.Paises, "Seleccione un país", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaisPertenencia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RolEncuesta, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.RolEncuesta, (List<SelectListItem>)ViewBag.Roles, "Seleccione un rol", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.RolEncuesta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DestinoPrimario, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DestinoPrimario, new SelectList(ViewBag.Destinos), "Seleccione destino primario", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DestinoPrimario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DestinoSecundario, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DestinoSecundario, new SelectList(ViewBag.Destinos), "Seleccione destino secundario", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DestinoSecundario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar Encuesta" class="btn btn-success" />
+                @Html.ActionLink("Cancelar", "Index", "Home", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
